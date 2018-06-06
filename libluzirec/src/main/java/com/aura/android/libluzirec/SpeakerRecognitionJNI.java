@@ -1,6 +1,8 @@
 package com.aura.android.libluzirec;
 
-public class JNIExample
+import org.json.JSONArray;
+
+public class SpeakerRecognitionJNI
 {
     static
     {

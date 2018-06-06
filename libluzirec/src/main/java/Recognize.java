@@ -1,9 +1,17 @@
+import com.aura.android.libluzirec.SpeakerRecognitionJNI;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Recognize
 {
     JSONArray users = new JSONArray();
+    SpeakerRecognitionJNI speakRecJNI;
+
+    public Recognize()
+    {
+        speakRecJNI = new SpeakerRecognitionJNI();
+    }
 
     public void addUserProfile(JSONObject profile)
     {
