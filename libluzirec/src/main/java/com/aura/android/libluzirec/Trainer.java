@@ -1,3 +1,5 @@
+package com.aura.android.libluzirec;
+
 import org.json.JSONObject;
 
 public class Trainer

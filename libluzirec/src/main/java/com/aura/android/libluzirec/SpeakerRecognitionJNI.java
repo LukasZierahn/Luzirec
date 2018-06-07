@@ -10,4 +10,5 @@ public class SpeakerRecognitionJNI
     }
 
     public native String stringFromJNI();
+    public native float scoreUser(String userID);
 }

@@ -9,3 +9,9 @@ JNICALL Java_com_aura_android_libluzirec_SpeakerRecognitionJNI_stringFromJNI(JNI
     return env->NewStringUTF(hello.c_str());
 }
 
+extern "C" JNIEXPORT float
+JNICALL Java_com_aura_android_libluzirec_SpeakerRecognitionJNI_scoreUser(JNIEnv *env, jobject jobj, jstring userID, short)
+{
+    return 0.0f;
+}
+

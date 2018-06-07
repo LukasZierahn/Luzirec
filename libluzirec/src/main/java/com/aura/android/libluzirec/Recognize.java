@@ -1,3 +1,5 @@
+package com.aura.android.libluzirec;
+
 import com.aura.android.libluzirec.SpeakerRecognitionJNI;
 
 import org.json.JSONArray;
@@ -5,8 +7,8 @@ import org.json.JSONObject;
 
 public class Recognize
 {
-    JSONArray users = new JSONArray();
-    SpeakerRecognitionJNI speakRecJNI;
+    private JSONArray users = new JSONArray();
+    private SpeakerRecognitionJNI speakRecJNI;
 
     public Recognize()
     {
@@ -17,8 +19,9 @@ public class Recognize
     {
         users.put(profile);
     }
+    public int GetUserCount() { return users.length(); }
 
-    public static JSONArray recognizeUser(byte[] pcm_s16le_mono)
+    public JSONArray recognizeUser(byte[] pcm_s16le_mono)
     {
         JSONArray results = new JSONArray();
 
@@ -26,18 +29,11 @@ public class Recognize
         {
             JSONObject result1 = new JSONObject();
 
-            result1.put("userid", "lukas");
-            result1.put("score", "0.98");
-
-            results.put(result1);
-
-            JSONObject result2 = new JSONObject();
-
-            result2.put("userid", "dezi");
-            result2.put("score", "0.22");
-
-            results.put(result2);
-
+            for(int i = 0; i < users.length(); i++)
+            {
+                users.getJSONObject(i).put("score", speakRecJNI.scoreUser(users.getJSONObject(i).getString("userID")));
+                results.put(users.getJSONObject(i));
+            }
         }
         catch (Exception ignore)
         {
@@ -45,5 +41,4 @@ public class Recognize
 
         return results;
     }
-
 }

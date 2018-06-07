@@ -12,7 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.aura.android.libluzirec.Recognize;
 import com.aura.android.libluzirec.SpeakerRecognitionJNI;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static android.media.MediaRecorder.AudioSource.MIC;
 
@@ -22,10 +26,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int bufferSize = 1024;
 
     private TextView txtview;
+    private TextView resultTxtView;
     private AudioRecord audioRecorder;
     private Button recordbttn;
     private boolean isRecording = false;
     private Thread recordingThread;
+
+    private Recognize recognize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +41,24 @@ public class MainActivity extends AppCompatActivity {
 
         //initialising variables
         txtview = findViewById(R.id.textView);
+        resultTxtView = findViewById(R.id.resultTxtView);
+        recognize = new Recognize();
+        JSONObject Lukas = new JSONObject();
+        JSONObject Maxi = new JSONObject();
+        try
+        {
+            Lukas.put("userID", "Lukas");
+            Maxi.put("userID", "Maxi");
+        }
+        catch (Exception ignore)
+        {
+        }
+        recognize.addUserProfile(Lukas);
+        recognize.addUserProfile(Maxi);
 
         //creating a button and making it record when pressed
         recordbttn = findViewById(R.id.recordButton);
         recordbttn.setOnClickListener(btnClick);
-
-        //c++ stuff, not doing anything right now
-        SpeakerRecognitionJNI example = new SpeakerRecognitionJNI();
-        txtview.setText(example.stringFromJNI());
 
         //asking the user to use the Microphone
         int hasMicrophonePermission = PackageManager.PERMISSION_GRANTED;
@@ -72,6 +89,22 @@ public class MainActivity extends AppCompatActivity {
 
     protected void StopRecording()
     {
+        JSONArray results = recognize.recognizeUser(null);
+        String resultString = "";
+        for (int i = 0; i < recognize.GetUserCount(); i++)
+        {
+            try
+            {
+                resultString += results.getJSONObject(i).get("userID") + " " + results.getJSONObject(i).get("score") + "\n";
+            }
+            catch (Exception ignore)
+            {
+            }
+        }
+
+        resultTxtView.setText(resultString);
+
+
         txtview.setText("Microphone Access Granted");
         audioRecorder.stop();
         audioRecorder.release();
